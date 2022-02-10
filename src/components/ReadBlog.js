@@ -1,11 +1,9 @@
 import React from "react";
 
-const ReadBlog = (props) => {
-    console.log(props)
+const ReadBlog = () => {
+   
     return(
         <div>
-           <h3>{props.description}</h3>
-           <p>{props.note}</p>
            <p>dddd</p>
         </div>
     )

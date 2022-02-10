@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import BlogListItem from "./BlogListItem";
 import getVisibleBlog from '../selectors/blogs'
 
-const BlogList = (props) => (
+export const BlogList = (props) => (
     <div>
       <h3>Blog List</h3>
       {props.blogs.map((blog) => {
