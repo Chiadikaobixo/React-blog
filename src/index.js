@@ -5,6 +5,7 @@ import AppRouter from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import getVisibleBlog from './selectors/blogs'
 import reportWebVitals from './reportWebVitals';
+import './firebase/firebase';
 
 const store = configureStore()
 

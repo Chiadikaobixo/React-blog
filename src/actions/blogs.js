@@ -1,21 +1,26 @@
-import { v4 as uuidv4 } from 'uuid';
+import db from '../firebase/firebase'
+import {push, ref} from 'firebase/database'
 
 //ADD_BLOG
-export const addBlog = (
-    {
-        description = '',
-        note = '',
-        createdAt = 0
-    } ={}
-) => ({
+export const addBlog = (blog) => ({
     type: 'ADD_BLOG',
-    blog: {
-        id: uuidv4(),
-        description,
-        note,
-        createdAt
-    }
+    blog
 })
+
+export const startAddBlog = (blogData = {}) => {
+    return(dispatch) =>{
+        const{description = '', note = '', createdAt = 0}=blogData
+        const blog = {description, note, createdAt}
+        return push(ref(db, 'blogs'), {
+            ...blog
+        }).then((ref) => {
+            dispatch(addBlog({
+                id: ref.key,
+                ...blog
+            }))
+        })
+    }
+}
 //REMOVE_BLOG
 export const removeBlog = ({id} = {}) =>  ({
     type: 'REMOVE_BLOG',
