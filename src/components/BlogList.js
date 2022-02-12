@@ -5,7 +5,6 @@ import getVisibleBlog from '../selectors/blogs'
 
 export const BlogList = (props) => (
     <div>
-      <h3>Blog List</h3>
       {props.blogs.map((blog) => {
         return <BlogListItem key={blog.id} {...blog} />
       })}

@@ -22,6 +22,8 @@ export default (state = defaultBlogReducer, action) => {
                 return blog
             }
         })
+    case 'SET_BLOG':
+        return action.blogs
         default:
         return state
     }

@@ -1,27 +1,30 @@
 import React from "react";
-import Header from "../components/Header";
 import LoginPage from "../components/LoginPage";
 import BlogDashbord from "../components/BlogDashboard";
 import CreateBlog from "../components/CreateBlog";
+import createHistory from 'history/createBrowserHistory';
 import EditBlog from "../components/EditBlog";
-import ReadBlog from "../components/ReadBlog"
+import ReadBlog from "../components/ReadBlog";
 import NotFoundPage from "../components/NotFoundPage";
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Router, Route, Switch} from 'react-router-dom';
+import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
+
+export const history = createHistory()
 
 const AppRouter = () => (
-        <BrowserRouter>
+  <Router history={history}>
           <div>
-            <Header/>
             <Switch>
-              <Route path="/" component={LoginPage} exact={true} />
-              <Route path= "/dashboard" component={BlogDashbord} />
-              <Route path= "/create" component={CreateBlog} />
-              <Route path= "/edit/:id" component={EditBlog} />
-              <Route path= "/read/:id" component={ReadBlog} />
+              <PublicRoute path="/" component={LoginPage} exact={true} />
+              <PrivateRoute path= "/dashboard" component={BlogDashbord} />
+              <PrivateRoute path= "/create" component={CreateBlog} />
+              <PrivateRoute path= "/edit/:id" component={EditBlog} />
+              <PrivateRoute path= "/read/:id" component={ReadBlog} />
               <Route component={NotFoundPage} />
             </Switch>
           </div>
-        </BrowserRouter>
+          </Router>
       )
 
 export default AppRouter

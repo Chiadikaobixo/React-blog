@@ -1,11 +1,29 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk'
-import { startAddBlog, addBlog, removeBlog, editBlog } from "../../actions/blogs";
+import {
+    startAddBlog,
+    addBlog,
+    removeBlog,
+    startRemoveBlog, 
+    editBlog,
+    setAddBlog,
+    startSetAddBlog,
+    startEditBlog
+} from "../../actions/blogs";
 import blogs from '../fixtures/blogs'
 import db from '../../firebase/firebase'
-import { get, ref } from 'firebase/database';
+import { get, ref, set } from 'firebase/database';
 
 const createMockStore = configureMockStore([thunk])
+
+beforeEach((done) => {
+    const blogData = {}
+    blogs.forEach(({ id, description, note, createdAt }) => {
+        blogData[id] = { description, note, createdAt }
+    })
+    set(ref(db, 'blogs'), blogData).then(() => done())
+})
+
 
 test('should setup addblog action object with provided values', () => {
     const action = addBlog(blogs[1])
@@ -32,9 +50,9 @@ test('should add blog to database and store', (done) => {
             }
         })
         return get(ref(db, `blogs/${action[0].blog.id}`))
-        }).then((snapshot) => {
-            expect(snapshot.val()).toEqual(blogData)
-            done()
+    }).then((snapshot) => {
+        expect(snapshot.val()).toEqual(blogData)
+        done()
     })
 })
 
@@ -51,13 +69,13 @@ test('should add blog with default to database and store', () => {
             type: 'ADD_BLOG',
             blog: {
                 id: expect.any(String),
-                ...blogData
+                ...blogDataDefault
             }
         })
         return get(ref(db, `blogs/${action[0].blog.id}`))
-        }).then((snapshot) => {
-            expect(snapshot.val()).toEqual(blogDataDefault)
-            done()
+    }).then((snapshot) => {
+        expect(snapshot.val()).toEqual(blogDataDefault)
+        done()
     })
 })
 
@@ -66,6 +84,22 @@ test('should setup removeblog action objects', () => {
     expect(action).toEqual({
         type: 'REMOVE_BLOG',
         id: '123abc'
+    })
+})
+
+test('should remove blog from firebase', (done) => {
+    const store = createMockStore({})
+    const id = blogs[2].id
+    store.dispatch(startRemoveBlog({ id })).then(() => {
+        const actions = store.getActions()
+        expect(actions[0]).toEqual({
+            type: 'REMOVE_BLOG',
+            id
+        })
+        return get(ref(db, `users/blogs/${id}`))
+    }).then((snapshot) => {
+        expect(snapshot.val()).toBeFalsy()
+        done()
     })
 })
 
@@ -79,5 +113,43 @@ test('should setup editBlog action objects', () => {
         updates: {
             name: 'chiadi'
         }
+    })
+})
+
+test('should edit blog from firebase', (done) => {
+    const store = createMockStore({})
+    const id = blogs[1].id
+    const updates = { description: 'my new note' }
+    store.dispatch(startEditBlog(id, updates)).then(() => {
+        const actions = store.getActions()
+        expect(actions[1]).toEqual({
+            type: 'EDIT_BLOG',
+            id,
+            updates
+        })
+        return get(ref(db, `blogs/${id}`))
+    }).then((snapshot) => {
+        expect(snapshot.val().description).toBe(updates.description)
+        done()
+    })
+})
+
+test('should setup set blog', () => {
+    const action = setAddBlog(blogs)
+    expect(action).toEqual({
+        type: 'SET_BLOG',
+        blogs
+    })
+})
+
+test('should fetch the blog from firebase', (done) => {
+    const store = createMockStore({})
+    store.dispatch(startSetAddBlog()).then(() => {
+        const actions = store.getActions()
+        expect(actions[0]).toEqual({
+            type: 'SET_BLOG',
+            blogs
+        })
+        done()
     })
 })

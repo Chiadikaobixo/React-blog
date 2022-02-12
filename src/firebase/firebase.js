@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database"
-import {  GoogleAuthProvider } from 'firebase/auth'
+import { GoogleAuthProvider, TwitterAuthProvider } from 'firebase/auth'
 
 
 const firebaseConfig = initializeApp ({
@@ -16,5 +16,6 @@ const firebaseConfig = initializeApp ({
 const db = getDatabase(firebaseConfig);
 
 const provider = new GoogleAuthProvider()
+const twitterProvider = new TwitterAuthProvider
 
-export{provider, db as default}
+export{provider, twitterProvider, db as default}

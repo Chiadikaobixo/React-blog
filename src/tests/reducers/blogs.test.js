@@ -62,3 +62,12 @@ test('should not editBlog if blog not found ', () => {
     const result = blogsReducers(blogs, action)
     expect(result).toEqual(blogs)
 })
+
+test('should set blogs', () => {
+    const action = {
+        type: 'SET_BLOG',
+        blogs: [blogs[2]]
+    }
+    const result = blogsReducers(blogs, action)
+    expect(result).toEqual([blogs[2]])
+})
