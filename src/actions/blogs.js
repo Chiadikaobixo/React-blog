@@ -8,10 +8,11 @@ export const addBlog = (blog) => ({
 })
 
 export const startAddBlog = (blogData = {}) => {
-    return(dispatch) =>{
+    return(dispatch, getState) =>{
+        const uid = getState().auth.uid
         const{description = '', note = '', createdAt = 0}=blogData
         const blog = {description, note, createdAt}
-        return push(ref(db, 'blogs'), {
+        return push(ref(db, `users/${uid}/blogs`), {
             ...blog
         }).then((ref) => {
             dispatch(addBlog({
@@ -29,8 +30,9 @@ export const removeBlog = ({id} = {}) =>  ({
 })
 
 export const startRemoveBlog = ({id} = {}) => {
-    return(dispatch) => {
-       return remove(ref(db, `blogs/${id}`)).then(() => {
+    return(dispatch, getState) => {
+       const uid = getState().auth.uid
+       return remove(ref(db, `users/${uid}/blogs/${id}`)).then(() => {
         dispatch(removeBlog({id}))
        })
     }
@@ -45,8 +47,9 @@ export const editBlog = (id, updates) => ({
 })
 
 export const startEditBlog = (id, updates) => {
-    return(dispatch) => {
-        return update(ref(db, `blogs/${id}`), updates).then(() => {
+    return(dispatch, getState) => {
+        const uid = getState().auth.uid
+        return update(ref(db, `users/${uid}/blogs/${id}`), updates).then(() => {
             dispatch(editBlog(id, updates))
         })
     }
@@ -59,9 +62,9 @@ export const setAddBlog = (blogs) => ({
 })
 
 export const startSetAddBlog = () => {
-    return (dispatch) => {
-        
-        return get(ref(db, 'blogs')).then((snapshot) => {
+    return (dispatch, getState) => {
+        const uid = getState().auth.uid
+        return get(ref(db, `users/${uid}/blogs`)).then((snapshot) => {
             const blogs = []
             
             snapshot.forEach((childSnapshot) => {
@@ -76,9 +79,9 @@ export const startSetAddBlog = () => {
 }
 
 export const startSetAddTwitter = () => {
-    return (dispatch) => {
-        
-        return get(ref(db, 'blogs')).then((snapshot) => {
+    return (dispatch, getState) => {
+        const uid = getState().auth.uid
+        return get(ref(db, `users/${uid}/blogs`)).then((snapshot) => {
             const blogs = []
             
             snapshot.forEach((childSnapshot) => {

@@ -14,6 +14,9 @@ import blogs from '../fixtures/blogs'
 import db from '../../firebase/firebase'
 import { get, ref, set } from 'firebase/database';
 
+
+const uid = 'mytestuid'
+const defaultAuthState = { auth: { uid } } 
 const createMockStore = configureMockStore([thunk])
 
 beforeEach((done) => {
@@ -21,7 +24,7 @@ beforeEach((done) => {
     blogs.forEach(({ id, description, note, createdAt }) => {
         blogData[id] = { description, note, createdAt }
     })
-    set(ref(db, 'blogs'), blogData).then(() => done())
+    set(ref(db, `users/${uid}/blogs`), blogData).then(() => done())
 })
 
 
@@ -34,7 +37,7 @@ test('should setup addblog action object with provided values', () => {
 })
 
 test('should add blog to database and store', (done) => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     const blogData = {
         description: 'chelsea',
         note: 'chelsea player',
@@ -49,7 +52,7 @@ test('should add blog to database and store', (done) => {
                 ...blogData
             }
         })
-        return get(ref(db, `blogs/${action[0].blog.id}`))
+        return get(ref(db, `users/${uid}/blogs/${action[0].blog.id}`))
     }).then((snapshot) => {
         expect(snapshot.val()).toEqual(blogData)
         done()
@@ -57,7 +60,7 @@ test('should add blog to database and store', (done) => {
 })
 
 test('should add blog with default to database and store', () => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     const blogDataDefault = {
         description: '',
         note: '',
@@ -72,7 +75,7 @@ test('should add blog with default to database and store', () => {
                 ...blogDataDefault
             }
         })
-        return get(ref(db, `blogs/${action[0].blog.id}`))
+        return get(ref(db, `users/${uid}/blogs/${action[0].blog.id}`))
     }).then((snapshot) => {
         expect(snapshot.val()).toEqual(blogDataDefault)
         done()
@@ -88,7 +91,7 @@ test('should setup removeblog action objects', () => {
 })
 
 test('should remove blog from firebase', (done) => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     const id = blogs[2].id
     store.dispatch(startRemoveBlog({ id })).then(() => {
         const actions = store.getActions()
@@ -96,7 +99,7 @@ test('should remove blog from firebase', (done) => {
             type: 'REMOVE_BLOG',
             id
         })
-        return get(ref(db, `users/blogs/${id}`))
+        return get(ref(db, `users/${uid}/blogs/${id}`))
     }).then((snapshot) => {
         expect(snapshot.val()).toBeFalsy()
         done()
@@ -117,7 +120,7 @@ test('should setup editBlog action objects', () => {
 })
 
 test('should edit blog from firebase', (done) => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     const id = blogs[1].id
     const updates = { description: 'my new note' }
     store.dispatch(startEditBlog(id, updates)).then(() => {
@@ -127,7 +130,7 @@ test('should edit blog from firebase', (done) => {
             id,
             updates
         })
-        return get(ref(db, `blogs/${id}`))
+        return get(ref(db, `users/${uid}/blogs/${id}`))
     }).then((snapshot) => {
         expect(snapshot.val().description).toBe(updates.description)
         done()
@@ -143,7 +146,7 @@ test('should setup set blog', () => {
 })
 
 test('should fetch the blog from firebase', (done) => {
-    const store = createMockStore({})
+    const store = createMockStore(defaultAuthState)
     store.dispatch(startSetAddBlog()).then(() => {
         const actions = store.getActions()
         expect(actions[0]).toEqual({
