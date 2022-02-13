@@ -5,9 +5,7 @@ import BlogForm from "./BlogForm";
 
 const EditBlog = (props) => {
   return(
-    <div>
-    <a href="/read/:id">link</a>
-      <h3> Edit Blog</h3>
+    <div className="content-container">
       <BlogForm
          blog={props.blog}
          onSubmit={(blog) => {
@@ -15,10 +13,10 @@ const EditBlog = (props) => {
            props.history.push('/dashboard')
          }} 
       />
-      <button onClick={() => {
+      <button className="button button--secondary" onClick={() => {
         props.dispatch(startRemoveBlog({id: props.blog.id}))
         props.history.push('/dashboard')
-       }}>Remove post</button>
+       }}>Remove Post</button>
     
     </div>
   )

@@ -8,6 +8,9 @@ import reportWebVitals from './reportWebVitals';
 import { login, logout, loginTwitter, logoutTwitter } from './actions/auth'
 import './firebase/firebase';
 import { onAuthStateChanged, getAuth} from 'firebase/auth'
+import './styles.scss'
+import LoadingPage from './components/LoadingPage';
+
 
 const store = configureStore()
 
@@ -18,7 +21,7 @@ const jsx = (
     </React.StrictMode>
   </Provider>
 )
-ReactDOM.render(<p>Loading...</p>,document.getElementById('root'));
+ReactDOM.render(<LoadingPage />,document.getElementById('root'));
 
 
 let hasRendered = false

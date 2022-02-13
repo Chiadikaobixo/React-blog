@@ -4,7 +4,7 @@ import BlogForm from "./BlogForm";
 import { startAddBlog } from "../actions/blogs";
 
 const CreateBlog = (props) => (
-    <div>
+    <div className="content-container">
       <BlogForm
         onSubmit={(blog) => {
           props.dispatch(startAddBlog(blog))

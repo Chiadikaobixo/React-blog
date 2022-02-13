@@ -1,14 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
-
-const BlogListItem = ({id, description, note, createdAt}) => (
+const BlogListItem = ({ id, description, note, createdAt }) => (
     <div>
-        <Link to={`/edit/${id}`}>
-           <h3>{description}</h3>
+        <Link className="list-item" to={`/edit/${id}`}>
+            <h3 className="list-item__title">{description}</h3>
+            <div>
+            <p className="list-item__title">{note}</p>
+            </div>
+            <span className="list-item__sub-title">{moment(createdAt).format('MMMM Do, YYYY')}</span>
         </Link>
-        <p>{note} - {createdAt}</p>
-
     </div>
 )
 export default BlogListItem

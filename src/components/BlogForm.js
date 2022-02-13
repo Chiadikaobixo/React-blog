@@ -7,7 +7,7 @@ export default class BlogForm extends React.Component {
 
         this.state = {
             description: props.blog ? props.blog.description : '',
-            note: props.blog ? props.blog.note :'',
+            note: props.blog ? props.blog.note : '',
             createdAt: props.blog ? moment(props.blog.createdAt) : moment(),
             error: ''
         }
@@ -23,9 +23,9 @@ export default class BlogForm extends React.Component {
     onSubmit = (e) => {
         e.preventDefault()
 
-        if(!this.state.description){
-            this.setState(() => ({error: 'please provide a description'}))
-        }else{
+        if (!this.state.description) {
+            this.setState(() => ({ error: 'please provide a description' }))
+        } else {
             this.setState(() => ({ error: '' }))
             this.props.onSubmit({
                 description: this.state.description,
@@ -34,28 +34,32 @@ export default class BlogForm extends React.Component {
             })
         }
     }
-    render(){
+    render() {
         return (
-           <div>
-             <p>{this.state.error}</p>
-             <form onSubmit={this.onSubmit}>
-               <input
-                 type="text"
-                 placeholder="description"
-                 autoFocus
-                 value={this.state.description}
-                 onChange={this.onDescriptionChange}
-               />
-               <textarea
-                 type="text"
-                 placeholder="Add a note for your Blog (optional)"
-                 value={this.state.note}
-                 onChange={this.onNoteChange}
-               >
-               </textarea>
-               <button>save Post</button>
-             </form>
-           </div>
+            <div>
+                <form className="form" onSubmit={this.onSubmit}>
+                    <p className="form__error">{this.state.error}</p>
+                    <input
+                        type="text"
+                        placeholder="description"
+                        className="text-input"
+                        autoFocus
+                        value={this.state.description}
+                        onChange={this.onDescriptionChange}
+                    />
+                    <textarea
+                        type="text"
+                        className="textarea"
+                        placeholder="Add a note for your Blog (optional)"
+                        value={this.state.note}
+                        onChange={this.onNoteChange}
+                    >
+                    </textarea>
+                    <div>
+                        <button className="button">save Post</button>
+                    </div>
+                </form>
+            </div>
         )
     }
 }
