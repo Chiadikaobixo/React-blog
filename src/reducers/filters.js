@@ -10,10 +10,10 @@ export default (state = defaultFilterReducer, action) => {
                ...state,
                text: action.text
             }
-        case 'SORT_BY_TITLE':
+        case 'SORT_BY_DESCRIPTION':
             return {
                 ...state,
-                sortBy: 'title'
+                sortBy: 'description'
             }
         case 'SORT_BY_DATE':
             return {

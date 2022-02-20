@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { setTextFilter, sortByDate, sortByTitle } from "../actions/filters";
+import { setTextFilter, sortByDate, sortByDescription } from "../actions/filters";
 
 const BlogListFilters = (props) => (
   <div className="content-container">
@@ -24,12 +24,12 @@ const BlogListFilters = (props) => (
               onChange={(e) => {
                 if (e.target.value === 'date') {
                   props.dispatch(sortByDate())
-                } else if (e.target.value === 'title') {
-                  props.dispatch(sortByTitle())
+                } else if (e.target.value === 'description') {
+                  props.dispatch(sortByDescription())
                 }
               }}>
               <option value="date">By Date</option>
-              <option value="title">By Title</option>
+              <option value="description">By Title</option>
             </select>
           </div>
           <div className="input-group__button">
