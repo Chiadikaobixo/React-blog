@@ -3,14 +3,15 @@ import { getDatabase } from "firebase/database"
 import { GoogleAuthProvider, TwitterAuthProvider } from 'firebase/auth'
 
 
-const firebaseConfig = initializeApp ({
-  apiKey: "AIzaSyCweSc_RIQt-HkvD_xPA4QAkNR3VLKywwg",
-  authDomain: "blog-68b22.firebaseapp.com",
-  projectId: "blog-68b22",
-  storageBucket: "blog-68b22.appspot.com",
-  messagingSenderId: "710921736181",
-  appId: "1:710921736181:web:9414af1aa6e86dc1c21abc",
-  measurementId: "G-EJG8V9JNS6"
+const firebaseConfig = initializeApp({
+  apiKey: process.env.REACT_APP_apiKey,
+  authDomain: process.env.REACT_APP_authDomain,
+  databaseURL: process.env.REACT_APP_databaseURL,
+  projectId: process.env.REACT_APP_projectId,
+  storageBucket: process.env.REACT_APP_storageBucket,
+  messagingSenderId: process.env.REACT_APP_messagingSenderId,
+  appId: process.env.REACT_APP_appId,
+  measurementId: process.env.REACT_APP_measurementId,
 });
 
 const db = getDatabase(firebaseConfig);
@@ -18,4 +19,4 @@ const db = getDatabase(firebaseConfig);
 const provider = new GoogleAuthProvider()
 const twitterProvider = new TwitterAuthProvider
 
-export{provider, twitterProvider, db as default}
+export { provider, twitterProvider, db as default }
